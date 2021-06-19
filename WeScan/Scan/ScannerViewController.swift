@@ -9,8 +9,13 @@
 import UIKit
 import AVFoundation
 
+public protocol TicketScannerControllerDelegate: NSObjectProtocol {
+    func scanned(image: UIImage)
+}
+
 /// The `ScannerViewController` offers an interface to give feedback to the user regarding quadrilaterals that are detected. It also gives the user the opportunity to capture an image with a detected rectangle.
 public final class ScannerViewController: UIViewController {
+    public weak var ticketScannerControllerDelegate: TicketScannerControllerDelegate?
     
     private var captureSessionManager: CaptureSessionManager?
     private let videoPreviewLayer = AVCaptureVideoPreviewLayer()
@@ -26,6 +31,7 @@ public final class ScannerViewController: UIViewController {
     
     /// The original bar style that was set by the host app
     private var originalBarStyle: UIBarStyle?
+    
     
     private lazy var shutterButton: ShutterButton = {
         let button = ShutterButton()
@@ -291,6 +297,7 @@ extension ScannerViewController: RectangleDetectionDelegateProtocol {
         activityIndicator.stopAnimating()
         
         let editVC = EditScanViewController(image: picture, quad: quad)
+        editVC.ticketScannerControllerDelegate = ticketScannerControllerDelegate
         navigationController?.pushViewController(editVC, animated: false)
         
         shutterButton.isUserInteractionEnabled = true

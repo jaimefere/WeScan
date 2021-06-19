@@ -11,6 +11,7 @@ import AVFoundation
 
 /// The `EditScanViewController` offers an interface for the user to edit the detected quadrilateral.
 final class EditScanViewController: UIViewController {
+    public weak var ticketScannerControllerDelegate: TicketScannerControllerDelegate?
     
     private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
@@ -20,7 +21,7 @@ final class EditScanViewController: UIViewController {
         imageView.backgroundColor = .black
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
+        return imageView 
     }()
     
     private lazy var quadView: QuadrilateralView = {
@@ -166,10 +167,11 @@ final class EditScanViewController: UIViewController {
         let enhancedImage = filteredImage.applyingAdaptiveThreshold()?.withFixedOrientation()
         let enhancedScan = enhancedImage.flatMap { ImageScannerScan(image: $0) }
         
-        let results = ImageScannerResults(detectedRectangle: scaledQuad, originalScan: ImageScannerScan(image: image), croppedScan: ImageScannerScan(image: croppedImage), enhancedScan: enhancedScan)
+        ticketScannerControllerDelegate?.scanned(image: croppedImage)
         
-        let reviewViewController = ReviewViewController(results: results)
-        navigationController?.pushViewController(reviewViewController, animated: true)
+//        let results = ImageScannerResults(detectedRectangle: scaledQuad, originalScan: ImageScannerScan(image: image), croppedScan: ImageScannerScan(image: croppedImage), enhancedScan: enhancedScan)
+//        let reviewViewController = ReviewViewController(results: results)
+//        navigationController?.pushViewController(reviewViewController, animated: true)
     }
     
     private func displayQuad() {

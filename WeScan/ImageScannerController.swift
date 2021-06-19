@@ -10,7 +10,7 @@ import UIKit
 import AVFoundation
 
 /// A set of methods that your delegate object must implement to interact with the image scanner interface.
-public protocol ImageScannerControllerDelegate: NSObjectProtocol {
+public protocol ImageScannerControllerDelegate: NSObjectProtocol { 
     
     /// Tells the delegate that the user scanned a document.
     ///
