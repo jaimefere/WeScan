@@ -168,6 +168,7 @@ final class EditScanViewController: UIViewController {
         let enhancedScan = enhancedImage.flatMap { ImageScannerScan(image: $0) }
         
         ticketScannerControllerDelegate?.scanned(image: croppedImage)
+        _ = navigationController?.popToRootViewController(animated: true)
         
 //        let results = ImageScannerResults(detectedRectangle: scaledQuad, originalScan: ImageScannerScan(image: image), croppedScan: ImageScannerScan(image: croppedImage), enhancedScan: enhancedScan)
 //        let reviewViewController = ReviewViewController(results: results)

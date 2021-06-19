@@ -8,9 +8,10 @@
 
 /* The "Next" button on the right side of the navigation bar on the Edit screen. */
 "wescan.edit.button.next" = "Next";
+"wescan.edit.button.done" = "Done";
 
 /* The title on the navigation bar of the Edit screen. */
-"wescan.edit.title" = "Edit Scan";
+"wescan.edit.title" = "Adjust Ticket";
 
 /* The title on the navigation bar of the Review screen. */
 "wescan.review.title" = "Review";
@@ -19,3 +20,4 @@
 "wescan.scanning.cancel" = "Cancel";
 "wescan.scanning.auto" = "Auto";
 "wescan.scanning.manual" = "Manual";
+"wescan.scanning.title" = "Camera";

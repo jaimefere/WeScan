@@ -76,7 +76,7 @@ public final class ScannerViewController: UIViewController {
     override public func viewDidLoad() {
         super.viewDidLoad()
         
-        title = nil
+        title = NSLocalizedString("wescan.scanning.title", tableName: nil, bundle: Bundle(for: ScannerViewController.self), value: "Camera", comment: "The title of the ScannerViewController")
         view.backgroundColor = UIColor.black
         
         setupViews()
