@@ -32,7 +32,7 @@ final class EditScanViewController: UIViewController {
     }()
     
     private lazy var nextButton: UIBarButtonItem = {
-        let title = NSLocalizedString("wescan.edit.button.next", tableName: nil, bundle: Bundle(for: EditScanViewController.self), value: "Next", comment: "A generic next button")
+        let title = NSLocalizedString("wescan.edit.button.done", comment: "A generic done button")
         let button = UIBarButtonItem(title: title, style: .plain, target: self, action: #selector(pushReviewController))
         button.tintColor = navigationController?.navigationBar.tintColor
         return button
@@ -73,7 +73,7 @@ final class EditScanViewController: UIViewController {
         
         setupViews()
         setupConstraints()
-        title = NSLocalizedString("wescan.edit.title", tableName: nil, bundle: Bundle(for: EditScanViewController.self), value: "Edit Scan", comment: "The title of the EditScanViewController")
+        title = NSLocalizedString("wescan.edit.title", comment: "The title of the EditScanViewController")
         navigationItem.rightBarButtonItem = nextButton
         if let firstVC = self.navigationController?.viewControllers.first, firstVC == self {
             navigationItem.leftBarButtonItem = cancelButton
@@ -163,13 +163,13 @@ final class EditScanViewController: UIViewController {
         ])
         
         let croppedImage = UIImage.from(ciImage: filteredImage)
-        // Enhanced Image
-        let enhancedImage = filteredImage.applyingAdaptiveThreshold()?.withFixedOrientation()
-        let enhancedScan = enhancedImage.flatMap { ImageScannerScan(image: $0) }
         
         ticketScannerControllerDelegate?.scanned(image: croppedImage)
         _ = navigationController?.popToRootViewController(animated: true)
         
+        // Enhanced Image
+//        let enhancedImage = filteredImage.applyingAdaptiveThreshold()?.withFixedOrientation()
+//        let enhancedScan = enhancedImage.flatMap { ImageScannerScan(image: $0) }
 //        let results = ImageScannerResults(detectedRectangle: scaledQuad, originalScan: ImageScannerScan(image: image), croppedScan: ImageScannerScan(image: croppedImage), enhancedScan: enhancedScan)
 //        let reviewViewController = ReviewViewController(results: results)
 //        navigationController?.pushViewController(reviewViewController, animated: true)
