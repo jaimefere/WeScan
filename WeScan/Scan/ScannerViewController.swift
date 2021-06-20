@@ -320,8 +320,7 @@ extension ScannerViewController: RectangleDetectionDelegateProtocol {
             let ciImage = CIImage(image: picture)
             let cgOrientation = CGImagePropertyOrientation(picture.imageOrientation)
             let orientedImage = ciImage!.oriented(forExifOrientation: Int32(cgOrientation.rawValue))
-            let resultQuad = quad ?? EditScanViewController.defaultQuad(forImage: picture)
-            let scaledQuad = resultQuad.scale(quadView.bounds.size, picture.size)
+            let scaledQuad = quad ?? EditScanViewController.defaultQuad(forImage: picture)
             var cartesianScaledQuad = scaledQuad.toCartesian(withHeight: picture.size.height)
             cartesianScaledQuad.reorganize()
             let filteredImage = orientedImage.applyingFilter("CIPerspectiveCorrection", parameters: [
