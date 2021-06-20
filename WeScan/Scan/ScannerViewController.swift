@@ -74,7 +74,7 @@ public final class ScannerViewController: UIViewController {
         return activityIndicator
     }()
     
-    public init(autoScan: Bool, editScan: Bool) {
+    public init(_ autoScan: Bool = true, _ editScan: Bool = false) {
         super.init(nibName: nil, bundle: nil)
         autoScanEnabled = autoScan
         editScanEnabled = editScan
