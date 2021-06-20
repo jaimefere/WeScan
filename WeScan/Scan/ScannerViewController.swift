@@ -115,7 +115,7 @@ public final class ScannerViewController: UIViewController {
         
         navigationController?.navigationBar.barStyle = .blackTranslucent
         
-        CaptureSession.current.isAutoScanEnabled = autoScanEnabled
+        CaptureSession.current.isAutoScanEnabled = !autoScanEnabled
         toggleAutoScan()
     }
     
