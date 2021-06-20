@@ -11,6 +11,7 @@ import AVFoundation
 
 public protocol TicketScannerControllerDelegate: NSObjectProtocol {
     func scanned(image: UIImage)
+    func onChangeAutoScan(state: Bool)
 }
 
 /// The `ScannerViewController` offers an interface to give feedback to the user regarding quadrilaterals that are detected. It also gives the user the opportunity to capture an image with a detected rectangle.
@@ -263,6 +264,7 @@ public final class ScannerViewController: UIViewController {
             CaptureSession.current.isAutoScanEnabled = true
             autoScanButton.title = NSLocalizedString("wescan.scanning.auto", tableName: nil, bundle: Bundle(for: ScannerViewController.self), value: "Auto", comment: "The auto button state")
         }
+        ticketScannerControllerDelegate?.onChangeAutoScan(state: CaptureSession.current.isAutoScanEnabled)
     }
     
     @objc private func toggleFlash() {
