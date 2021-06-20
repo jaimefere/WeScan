@@ -99,9 +99,8 @@ public final class ScannerViewController: UIViewController {
         
         captureSessionManager = CaptureSessionManager(videoPreviewLayer: videoPreviewLayer, delegate: self)
         
-        if(CaptureSession.current.isAutoScanEnabled != autoScanEnabled) {
-            toggleAutoScan()
-        }
+        CaptureSession.current.isAutoScanEnabled = autoScanEnabled
+        toggleAutoScan()
         
         originalBarStyle = navigationController?.navigationBar.barStyle
         
