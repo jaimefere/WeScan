@@ -53,7 +53,7 @@ public final class ScannerViewController: UIViewController {
     }()
     
     private lazy var autoScanButton: UIBarButtonItem = {
-        let title = NSLocalizedString("wescan.scanning.auto", tableName: nil, bundle: Bundle(for: ScannerViewController.self), value: "Auto", comment: "The auto button state")
+        let title = NSLocalizedString("wescan.scanning.auto", bundle: .module, comment: "The auto button state")
         let button = UIBarButtonItem(title: title, style: .plain, target: self, action: #selector(toggleAutoScan))
         button.tintColor = .white
         
@@ -99,9 +99,6 @@ public final class ScannerViewController: UIViewController {
         
         captureSessionManager = CaptureSessionManager(videoPreviewLayer: videoPreviewLayer, delegate: self)
         
-        CaptureSession.current.isAutoScanEnabled = autoScanEnabled
-        toggleAutoScan()
-        
         originalBarStyle = navigationController?.navigationBar.barStyle
         
         NotificationCenter.default.addObserver(self, selector: #selector(subjectAreaDidChange), name: Notification.Name.AVCaptureDeviceSubjectAreaDidChange, object: nil)
@@ -117,6 +114,9 @@ public final class ScannerViewController: UIViewController {
         UIApplication.shared.isIdleTimerDisabled = true
         
         navigationController?.navigationBar.barStyle = .blackTranslucent
+        
+        CaptureSession.current.isAutoScanEnabled = autoScanEnabled
+        toggleAutoScan()
     }
     
     override public func viewDidLayoutSubviews() {
@@ -259,10 +259,10 @@ public final class ScannerViewController: UIViewController {
     @objc private func toggleAutoScan() {
         if CaptureSession.current.isAutoScanEnabled {
             CaptureSession.current.isAutoScanEnabled = false
-            autoScanButton.title = NSLocalizedString("wescan.scanning.manual", tableName: nil, bundle: Bundle(for: ScannerViewController.self), value: "Manual", comment: "The manual button state")
+            autoScanButton.title = NSLocalizedString("wescan.scanning.manual", bundle: .module, comment: "The manual button state")
         } else {
             CaptureSession.current.isAutoScanEnabled = true
-            autoScanButton.title = NSLocalizedString("wescan.scanning.auto", tableName: nil, bundle: Bundle(for: ScannerViewController.self), value: "Auto", comment: "The auto button state")
+            autoScanButton.title = NSLocalizedString("wescan.scanning.auto", bundle: .module, comment: "The auto button state")
         }
         ticketScannerControllerDelegate?.onChangeAutoScan(state: CaptureSession.current.isAutoScanEnabled)
     }
