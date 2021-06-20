@@ -74,7 +74,7 @@ public final class ScannerViewController: UIViewController {
         return activityIndicator
     }()
     
-    public init(_ autoScan: Bool = true, _ editScan: Bool = false) {
+    public init(autoScan: Bool = true, editScan: Bool = false) {
         super.init(nibName: nil, bundle: nil)
         autoScanEnabled = autoScan
         editScanEnabled = editScan
@@ -320,7 +320,8 @@ extension ScannerViewController: RectangleDetectionDelegateProtocol {
             let ciImage = CIImage(image: picture)
             let cgOrientation = CGImagePropertyOrientation(picture.imageOrientation)
             let orientedImage = ciImage!.oriented(forExifOrientation: Int32(cgOrientation.rawValue))
-            let scaledQuad = quad!.scale(quadView.bounds.size, picture.size)
+            let resultQuad = quad ?? EditScanViewController.defaultQuad(forImage: picture)
+            let scaledQuad = resultQuad.scale(quadView.bounds.size, picture.size)
             var cartesianScaledQuad = scaledQuad.toCartesian(withHeight: picture.size.height)
             cartesianScaledQuad.reorganize()
             let filteredImage = orientedImage.applyingFilter("CIPerspectiveCorrection", parameters: [
@@ -331,6 +332,7 @@ extension ScannerViewController: RectangleDetectionDelegateProtocol {
             ])
             let croppedImage = UIImage.from(ciImage: filteredImage)
             ticketScannerControllerDelegate?.scanned(image: croppedImage)
+            _ = navigationController?.popToRootViewController(animated: true)
         }
         shutterButton.isUserInteractionEnabled = true
     }
