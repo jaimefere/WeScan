@@ -153,15 +153,13 @@ final class EditScanViewController: UIViewController {
         
         // Cropped Image
         var cartesianScaledQuad = scaledQuad.toCartesian(withHeight: image.size.height)
-        cartesianScaledQuad.reorganize()
-        
+        cartesianScaledQuad.reorganize()        
         let filteredImage = orientedImage.applyingFilter("CIPerspectiveCorrection", parameters: [
             "inputTopLeft": CIVector(cgPoint: cartesianScaledQuad.bottomLeft),
             "inputTopRight": CIVector(cgPoint: cartesianScaledQuad.bottomRight),
             "inputBottomLeft": CIVector(cgPoint: cartesianScaledQuad.topLeft),
             "inputBottomRight": CIVector(cgPoint: cartesianScaledQuad.topRight)
         ])
-        
         let croppedImage = UIImage.from(ciImage: filteredImage)
         
         ticketScannerControllerDelegate?.scanned(image: croppedImage)

@@ -32,6 +32,9 @@ public final class ScannerViewController: UIViewController {
     /// The original bar style that was set by the host app
     private var originalBarStyle: UIBarStyle?
     
+    private var autoScanEnabled = true
+    private var editScanEnabled = false
+    
     
     private lazy var shutterButton: ShutterButton = {
         let button = ShutterButton()
@@ -70,7 +73,17 @@ public final class ScannerViewController: UIViewController {
         activityIndicator.translatesAutoresizingMaskIntoConstraints = false
         return activityIndicator
     }()
-
+    
+    public init(autoScan: Bool, editScan: Bool) {
+        super.init(nibName: nil, bundle: nil)
+        autoScanEnabled = autoScan
+        editScanEnabled = editScan
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - Life Cycle
 
     override public func viewDidLoad() {
@@ -82,6 +95,9 @@ public final class ScannerViewController: UIViewController {
         setupViews()
         setupNavigationBar()
         setupConstraints()
+        if(!autoScanEnabled) {
+            toggleAutoScan()
+        }
         
         captureSessionManager = CaptureSessionManager(videoPreviewLayer: videoPreviewLayer, delegate: self)
         
@@ -295,12 +311,27 @@ extension ScannerViewController: RectangleDetectionDelegateProtocol {
     }
     
     func captureSessionManager(_ captureSessionManager: CaptureSessionManager, didCapturePicture picture: UIImage, withQuad quad: Quadrilateral?) {
-        activityIndicator.stopAnimating()
-        
-        let editVC = EditScanViewController(image: picture, quad: quad)
-        editVC.ticketScannerControllerDelegate = ticketScannerControllerDelegate
-        navigationController?.pushViewController(editVC, animated: false)
-        
+        activityIndicator.stopAnimating()        
+        if(editScanEnabled) {
+            let editVC = EditScanViewController(image: picture, quad: quad)
+            editVC.ticketScannerControllerDelegate = ticketScannerControllerDelegate
+            navigationController?.pushViewController(editVC, animated: false)
+        } else {
+            let ciImage = CIImage(image: picture)
+            let cgOrientation = CGImagePropertyOrientation(picture.imageOrientation)
+            let orientedImage = ciImage!.oriented(forExifOrientation: Int32(cgOrientation.rawValue))
+            let scaledQuad = quad!.scale(quadView.bounds.size, picture.size)
+            var cartesianScaledQuad = scaledQuad.toCartesian(withHeight: picture.size.height)
+            cartesianScaledQuad.reorganize()
+            let filteredImage = orientedImage.applyingFilter("CIPerspectiveCorrection", parameters: [
+                "inputTopLeft": CIVector(cgPoint: cartesianScaledQuad.bottomLeft),
+                "inputTopRight": CIVector(cgPoint: cartesianScaledQuad.bottomRight),
+                "inputBottomLeft": CIVector(cgPoint: cartesianScaledQuad.topLeft),
+                "inputBottomRight": CIVector(cgPoint: cartesianScaledQuad.topRight)
+            ])
+            let croppedImage = UIImage.from(ciImage: filteredImage)
+            ticketScannerControllerDelegate?.scanned(image: croppedImage)
+        }
         shutterButton.isUserInteractionEnabled = true
     }
     
