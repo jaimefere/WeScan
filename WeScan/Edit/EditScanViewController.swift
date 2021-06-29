@@ -163,7 +163,9 @@ final class EditScanViewController: UIViewController {
         let croppedImage = UIImage.from(ciImage: filteredImage)
         
         ticketScannerControllerDelegate?.scanned(image: croppedImage)
-        _ = navigationController?.popToRootViewController(animated: true)
+        navigationController?.popViewController(animated: true)
+        navigationController?.popViewController(animated: true)
+//        _ = navigationController?.popToRootViewController(animated: true)
         
         // Enhanced Image
 //        let enhancedImage = filteredImage.applyingAdaptiveThreshold()?.withFixedOrientation()

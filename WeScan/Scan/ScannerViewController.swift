@@ -333,7 +333,8 @@ extension ScannerViewController: RectangleDetectionDelegateProtocol {
             ])
             let croppedImage = UIImage.from(ciImage: filteredImage)
             ticketScannerControllerDelegate?.scanned(image: croppedImage)
-            _ = navigationController?.popToRootViewController(animated: true)
+            navigationController?.popViewController(animated: true)
+//            _ = navigationController?.popToRootViewController(animated: true)
         }
         shutterButton.isUserInteractionEnabled = true
     }
