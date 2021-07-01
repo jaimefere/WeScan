@@ -54,7 +54,7 @@ public final class ScannerViewController: UIViewController {
     
     private lazy var autoScanButton: UIBarButtonItem = {
         let title = NSLocalizedString("wescan.scanning.auto", bundle: .module, comment: "The auto button state")
-        let button = UIBarButtonItem(title: title, style: .plain, target: self, action: #selector(toggleAutoScan))
+        let button = UIBarButtonItem(title: title, style: .plain, target: self, action: #selector(toggleAutoScanAction))
         button.tintColor = .white
         
         return button
@@ -256,7 +256,12 @@ public final class ScannerViewController: UIViewController {
         captureSessionManager?.capturePhoto()
     }
     
-    @objc private func toggleAutoScan() {
+    @objc private func toggleAutoScanAction() {
+        autoScanEnabled = !autoScanEnabled
+        toggleAutoScan()
+    }
+    
+    private func toggleAutoScan() {
         if CaptureSession.current.isAutoScanEnabled {
             CaptureSession.current.isAutoScanEnabled = false
             autoScanButton.title = NSLocalizedString("wescan.scanning.manual", bundle: .module, comment: "The manual button state")
